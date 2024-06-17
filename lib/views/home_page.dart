@@ -23,23 +23,29 @@ class _HomePageState extends State<HomePage> {
     final taskProvider = Provider.of<TaskProvider>(context);
 
     return Scaffold(
+      backgroundColor: Color(0xFF7D50FF),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('lib/assets/icon1.png', height: 100),
+            Image.asset('lib/assets/icon1.png', height: 200),
             SizedBox(height: 20),
-            Text('Welcome', style: TextStyle(fontSize: 24)),
-            Text('Family', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Text('Welcome', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+            Text('Family', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/accomplished_tasks');
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black, // background color
+                backgroundColor: Colors.black,
               ),
-              child: Text('Accomplished tasks'),
+              child: Text(
+                'Accomplished tasks',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
             SizedBox(height: 20),
             ElevatedButton(

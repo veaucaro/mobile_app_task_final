@@ -20,16 +20,19 @@ class MyApp extends StatelessWidget {
           create: (_) => TaskProvider(TaskService(TaskRepository())),
         ),
       ],
-      child: MaterialApp(
-        title: 'TaskRoller',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => HomePage(),
+      child: SafeArea(
+        child: MaterialApp(
+          title: 'TaskRoller',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => HomePage(),
+            '/accomplished_tasks': (context) => AccomplishedTasksPage()
           },
+        ),
       ),
     );
   }
