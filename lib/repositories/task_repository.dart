@@ -10,7 +10,15 @@ class TaskRepository {
     return await _databaseService.personTasks();
   }
 
+  Future<List<String>> FindAllTask() async {
+    return await _databaseService.queryTasks();
+  }
+
   Future<void> addTask(PersonTask personTask) async {
     await _databaseService.insertPersonTask(personTask);
+  }
+
+  Future<void> addnewTask(String taskName) async {
+    await _databaseService.insertTaskName(taskName);
   }
 }

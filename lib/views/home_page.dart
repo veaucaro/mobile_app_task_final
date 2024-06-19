@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.pushNamed(context, '/');
               break;
             case 1:
-              Navigator.pushNamed(context, '/tasks');
+              Navigator.pushNamed(context, '/Save_task_name');
               break;
             case 2:
               Navigator.pushNamed(context, '/profiles');

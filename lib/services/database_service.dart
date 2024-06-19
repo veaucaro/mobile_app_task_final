@@ -4,11 +4,11 @@ import 'package:path/path.dart';
 import 'package:mobile_app_task_final/models/person.dart';
 
 class DatabaseService {
-  static final DatabaseService _instance = DatabaseService._internal();
+  static final DatabaseService _singleton  = DatabaseService._internal();
   static Database? _database;
 
   factory DatabaseService() {
-    return _instance;
+    return _singleton;
   }
 
   DatabaseService._internal();
@@ -21,22 +21,37 @@ class DatabaseService {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'task_database.db');
-
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _onCreate,
-    );
+    try {
+      String path = join(await getDatabasesPath(), 'Task.db');
+      print('Initializing database...');
+      Database database = await openDatabase(
+        path,
+        version: 1,
+        onCreate: _onCreate,
+      );
+      print('Database initialized successfully');
+      return database;
+    } catch (e) {
+      print('Error initializing database: $e');
+      rethrow;
+    }
   }
 
   Future _onCreate(Database db, int version) async {
+    print('Database tables created...');
+    await db.execute('''
+    CREATE TABLE tasks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      taskName TEXT NOT NULL
+    )
+    ''');
     await db.execute('''
     CREATE TABLE person_tasks (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       personName TEXT NOT NULL,
       taskTitle TEXT NOT NULL,
-      count INTEGER NOT NULL
+      count INTEGER NOT NULL,
+      FOREIGN KEY (taskTitle) REFERENCES tasks (taskName)
     )
     ''');
   }
@@ -48,6 +63,7 @@ class DatabaseService {
       personTask.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    print('PersonTask inserted successfully: $personTask');
   }
 
   Future<List<PersonTask>> personTasks() async {
@@ -58,4 +74,23 @@ class DatabaseService {
       return PersonTask.fromMap(maps[i]);
     });
   }
+
+  Future<List<String>> queryTasks() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('tasks');
+
+    return List.generate(maps.length, (i) {
+      return maps[i]['taskName'] as String;
+    });
+  }
+
+  Future<void> insertTaskName(String taskName) async {
+    final db = await database;
+    await db.insert(
+      'tasks',
+      {'taskName': taskName},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
 }
