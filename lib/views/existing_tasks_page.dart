@@ -3,7 +3,12 @@ import 'package:provider/provider.dart';
 import '../repositories/task_repository.dart';
 import '../widgets/bottom_nav_bar.dart';
 
-class Save_name extends StatelessWidget {
+class SaveName extends StatefulWidget {
+  @override
+  _SaveNameState createState() => _SaveNameState();
+}
+
+class _SaveNameState extends State<SaveName> {
   final TextEditingController _taskNameController = TextEditingController();
 
   @override
@@ -39,7 +44,7 @@ class Save_name extends StatelessWidget {
                       SnackBar(content: Text('Task added successfully')),
                     );
                     // Refresh the state to show the new task
-                    (context as Element).reassemble();
+                    setState(() {});
                   }
                 },
                 child: Text('Add Task'),
@@ -63,6 +68,18 @@ class Save_name extends StatelessWidget {
                             elevation: 2,
                             child: ListTile(
                               title: Text(taskName),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  // 删除任务
+                                  await taskRepository.deleteTask(taskName);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Task deleted successfully')),
+                                  );
+                                  // Refresh the state to show the updated task list
+                                  setState(() {});
+                                },
+                              ),
                             ),
                           ),
                         );
@@ -83,7 +100,7 @@ class Save_name extends StatelessWidget {
               Navigator.pushNamed(context, '/');
               break;
             case 1:
-              Navigator.pushNamed(context, '/Save_task_name');
+              Navigator.pushNamed(context, '/save_task_name');
               break;
             case 2:
               Navigator.pushNamed(context, '/profiles');

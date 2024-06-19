@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:mobile_app_task_final/views/existing_names_page.dart';
 import 'package:mobile_app_task_final/views/existing_tasks_page.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app_task_final/repositories/task_repository.dart';
@@ -50,7 +49,8 @@ class MyApp extends StatelessWidget {
           routes: {
             '/': (context) => HomePage(),
             '/accomplished_tasks': (context) => AccomplishedTasksPage(),
-            '/Save_task_name': (context) => Save_name()
+            '/save_task_name': (context) => SaveName(),
+            '/profiles': (context) => SaveFamilyName(),
           },
         ),
       ),

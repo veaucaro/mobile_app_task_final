@@ -14,6 +14,10 @@ class TaskRepository {
     return await _databaseService.queryTasks();
   }
 
+  Future<List<String>> FindAllPerson() async {
+    return await _databaseService.queryPersons();
+  }
+
   Future<void> addTask(PersonTask personTask) async {
     await _databaseService.insertPersonTask(personTask);
   }
@@ -21,4 +25,17 @@ class TaskRepository {
   Future<void> addnewTask(String taskName) async {
     await _databaseService.insertTaskName(taskName);
   }
+
+  Future<void> addnewPerson(String personName) async {
+    await _databaseService.insertPersonName(personName);
+  }
+
+  Future<void> deleteTask(String name) async {
+    await _databaseService.deleteTask(name);
+  }
+
+  Future<void> deletePerson(String name) async {
+    await _databaseService.deletePerson(name);
+  }
+
 }
