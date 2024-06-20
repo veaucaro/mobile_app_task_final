@@ -7,6 +7,7 @@ class Page3 extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Page 3'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Text('This is Page 3'),

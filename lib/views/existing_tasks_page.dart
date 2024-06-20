@@ -18,6 +18,7 @@ class _SaveNameState extends State<SaveName> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tasks name'),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -93,7 +94,7 @@ class _SaveNameState extends State<SaveName> {
         ),
       ),
       bottomNavigationBar: BottomNavBar(
-        currentIndex: 0,
+        currentIndex: 1,
         onTap: (index) {
           switch (index) {
             case 0:

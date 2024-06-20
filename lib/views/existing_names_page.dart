@@ -8,7 +8,6 @@ class SaveFamilyName extends StatefulWidget {
   _SaveFamilyNameState createState() => _SaveFamilyNameState();
 }
 
-
 class _SaveFamilyNameState extends State<SaveFamilyName> {
   final TextEditingController _PersonNameController = TextEditingController();
 
@@ -19,6 +18,7 @@ class _SaveFamilyNameState extends State<SaveFamilyName> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Family name'),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -44,7 +44,6 @@ class _SaveFamilyNameState extends State<SaveFamilyName> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('member added successfully')),
                     );
-                    // Refresh the state to show the new task
                     (context as Element).reassemble();
                   }
                 },
@@ -62,29 +61,27 @@ class _SaveFamilyNameState extends State<SaveFamilyName> {
                     return Text('No members found.');
                   } else {
                     return Column(
-                        children: snapshot.data!.map((personName) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                        child: Card(
-                          elevation: 2,
-                          child: ListTile(
-                            title: Text(personName),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () async {
-                                // 删除任务
-                                await taskRepository.deletePerson(personName);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Member deleted successfully')),
-                                );
-                                // Refresh the state to show the updated task list
-                                setState(() {});
-                              },
+                      children: snapshot.data!.map((personName) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                          child: Card(
+                            elevation: 2,
+                            child: ListTile(
+                              title: Text(personName),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  await taskRepository.deletePerson(personName);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Member deleted successfully')),
+                                  );
+                                  setState(() {});
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
                     );
                   }
                 },
@@ -94,7 +91,7 @@ class _SaveFamilyNameState extends State<SaveFamilyName> {
         ),
       ),
       bottomNavigationBar: BottomNavBar(
-        currentIndex: 0,
+        currentIndex: 2,
         onTap: (index) {
           switch (index) {
             case 0:

@@ -18,6 +18,7 @@ class _Page1State extends State<Page1> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
