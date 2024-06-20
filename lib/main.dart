@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_task_final/views/existing_names_page.dart';
 import 'package:mobile_app_task_final/views/existing_tasks_page.dart';
+import 'package:mobile_app_task_final/views/next_tasks_find_results_page.dart';
+import 'package:mobile_app_task_final/views/next_tasks_names_page.dart';
+import 'package:mobile_app_task_final/views/next_tasks_tasks_page.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_app_task_final/repositories/task_repository.dart';
 import 'package:mobile_app_task_final/services/database_service.dart';
@@ -51,6 +54,9 @@ class MyApp extends StatelessWidget {
             '/accomplished_tasks': (context) => AccomplishedTasksPage(),
             '/save_task_name': (context) => SaveName(),
             '/profiles': (context) => SaveFamilyName(),
+            '/next_tasks': (context) => Page1(),
+            '/page2': (context) => Page2(),
+            '/page3': (context) => Page3(),
           },
         ),
       ),
