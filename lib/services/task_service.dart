@@ -11,7 +11,7 @@ class TaskService {
     return repository.fetchTasks();
   }
 
-  Future<void> addTask(PersonTask personTask) async {
-    return repository.addTask(personTask);
+  Future<void> update(PersonTask personTask) async {
+    return repository.update(personTask);
   }
 }

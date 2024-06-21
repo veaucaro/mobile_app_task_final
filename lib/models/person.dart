@@ -3,7 +3,7 @@
 class PersonTask {
   final String personName;
   final String taskTitle;
-  final int count;
+  int count;
 
   PersonTask({
     required this.personName,

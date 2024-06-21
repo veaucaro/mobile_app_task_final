@@ -18,7 +18,7 @@ class TaskRepository {
     return await _databaseService.queryPersons();
   }
 
-  Future<void> addTask(PersonTask personTask) async {
+  Future<void> update(PersonTask personTask) async {
     await _databaseService.insertPersonTask(personTask);
   }
 

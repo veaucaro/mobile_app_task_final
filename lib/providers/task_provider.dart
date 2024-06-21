@@ -18,8 +18,8 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addTask(PersonTask personTask) async {
-    await service.addTask(personTask);
+  Future<void> update(PersonTask personTask) async {
+    await service.update(personTask);
     fetchTasks();
   }
 
@@ -43,6 +43,16 @@ class TaskProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+  void updateTaskPersonMappingInDatabase(String taskName, String personName) {
+    // Find the personTask object，if it exists, increment the count by 1，if it does not exist, create a new object
+    PersonTask? personTask = _tasks.firstWhere((element) => element.taskTitle == taskName && element.personName == personName, orElse: () => PersonTask(personName: personName, taskTitle: taskName, count: 0));
+    if (personTask.personName == null) {
+      service.update(personTask);
+    } else {
+      personTask.count = personTask.count+1;
+      service.update(personTask);
+    }
+  }
   void toggleSelectionP(String personName) {
     if (_selectedPerson.contains(personName)) {
       _selectedPerson.remove(personName);
@@ -52,4 +62,27 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
   //Find all tasks
+  void clearSelections() {
+    _selectedTasks.clear();
+    _selectedPerson.clear();
+    notifyListeners();
+  }
+
+  void selectAllTasks(List<String> tasks) {
+    _selectedTasks = List.from(tasks);
+    notifyListeners();
+  }
+  void selectAllPerson(List<String> persons) {
+    _selectedPerson = List.from(persons);
+    notifyListeners();
+  }
+
+  void clearAllPerson() {
+    _selectedPerson.clear();
+    notifyListeners();
+  }
+  void clearAllTasks() {
+    _selectedTasks.clear();
+    notifyListeners();
+  }
 }

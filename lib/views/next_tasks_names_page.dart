@@ -11,23 +11,57 @@ class Page2 extends StatefulWidget {
 }
 
 class _Page2State extends State<Page2> {
+  late Future<List<String>> _personsFuture;
+  List<String> _persons = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _personsFuture = _fetchPersons();
+  }
+
+  Future<List<String>> _fetchPersons() async {
+    try {
+      final persons = await Provider.of<TaskRepository>(context, listen: false).FindAllPerson();
+      return persons;
+    } catch (e) {
+      print('Error loading persons: $e');
+      return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final taskProvider = Provider.of<TaskProvider>(context);
-    final taskRepository = Provider.of<TaskRepository>(context);
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.select_all,size: 30,),
+            onPressed: () {
+              if (taskProvider.selectedPerson.length == _persons.length) {
+                taskProvider.clearAllPerson();
+              } else {
+              taskProvider.selectAllPerson(_persons);}
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            // 标题行
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
                   'Select your',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
-            Text(
+                Text(
                   ' Family members',
                   style: TextStyle(
                     fontSize: 28,
@@ -35,28 +69,31 @@ class _Page2State extends State<Page2> {
                     color: Colors.indigo,
                   ),
                 ),
+              ],
+            ),
             SizedBox(height: 20),
+            // FutureBuilder 显示家庭成员列表
             FutureBuilder<List<String>>(
-              future: taskRepository.FindAllPerson(), // 替换为你的方法，获取任务列表
+              future: _personsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Text('No tasks found.');
+                  return Text('No family members found.');
                 } else {
+                  _persons = snapshot.data!; // 更新家庭成员列表数据
                   return Expanded(
                     child: ListView.builder(
-                      itemCount: snapshot.data!.length,
+                      itemCount: _persons.length,
                       itemBuilder: (context, index) {
+                        final person = _persons[index];
                         return CheckboxListTile(
-                          title: Text(snapshot.data![index]),
-                          value: taskProvider.isSelectedP(snapshot.data![index]),
+                          title: Text(person),
+                          value: taskProvider.isSelectedP(person),
                           onChanged: (value) {
-                            setState(() {
-                              taskProvider.toggleSelectionP(snapshot.data![index]);
-                            });
+                            taskProvider.toggleSelectionP(person);
                           },
                         );
                       },
@@ -65,16 +102,28 @@ class _Page2State extends State<Page2> {
                 }
               },
             ),
+            // 下一步按钮
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
                   onPressed: () {
+                    if (taskProvider.selectedPerson.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please select at least one person.'),
+                        ),
+                      );
+                      return;
+                    }
+                    else{
                     Navigator.pushNamed(context, '/page3');
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.deepPurple, // 按钮文字颜色
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.deepPurple,
                   ),
                   child: Text('Next ->'),
                 ),
