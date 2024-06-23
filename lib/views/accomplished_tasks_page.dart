@@ -13,11 +13,11 @@ class AccomplishedTasksPage extends StatelessWidget {
       future: taskProvider.getPersonTasks(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return buildLoadingUI();
+          return buildLoadingUI(context);
         } else if (snapshot.hasError) {
-          return buildErrorUI(snapshot.error.toString());
+          return buildErrorUI(context, snapshot.error.toString());
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return buildNoTasksUI();
+          return buildNoTasksUI(context);
         } else {
           final tasks = snapshot.data!;
           final groupedTasks = _groupTasks(tasks);
@@ -49,7 +49,7 @@ class AccomplishedTasksPage extends StatelessWidget {
     );
   }
 
-  Widget buildLoadingUI() {
+  Widget buildLoadingUI(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -60,14 +60,23 @@ class AccomplishedTasksPage extends StatelessWidget {
       bottomNavigationBar: BottomNavBar(
         currentIndex: 1,
         onTap: (index) {
-
-          // Handle bottom nav bar taps
+          switch (index) {
+            case 0:
+              Navigator.pushNamed(context, '/');
+              break;
+            case 1:
+              Navigator.pushNamed(context, '/save_task_name');
+              break;
+            case 2:
+              Navigator.pushNamed(context, '/profiles');
+              break;
+          }
         },
       ),
     );
   }
 
-  Widget buildErrorUI(String error) {
+  Widget buildErrorUI(BuildContext context, String error) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -78,13 +87,23 @@ class AccomplishedTasksPage extends StatelessWidget {
       bottomNavigationBar: BottomNavBar(
         currentIndex: 1,
         onTap: (index) {
-          // Handle bottom nav bar taps
+          switch (index) {
+            case 0:
+              Navigator.pushNamed(context, '/');
+              break;
+            case 1:
+              Navigator.pushNamed(context, '/save_task_name');
+              break;
+            case 2:
+              Navigator.pushNamed(context, '/profiles');
+              break;
+          }
         },
       ),
     );
   }
 
-  Widget buildNoTasksUI() {
+  Widget buildNoTasksUI(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -95,7 +114,17 @@ class AccomplishedTasksPage extends StatelessWidget {
       bottomNavigationBar: BottomNavBar(
         currentIndex: 1,
         onTap: (index) {
-          // Handle bottom nav bar taps
+          switch (index) {
+            case 0:
+              Navigator.pushNamed(context, '/');
+              break;
+            case 1:
+              Navigator.pushNamed(context, '/save_task_name');
+              break;
+            case 2:
+              Navigator.pushNamed(context, '/profiles');
+              break;
+          }
         },
       ),
     );
