@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/task_provider.dart';
 import '../repositories/task_repository.dart';
+import '../widgets/bottom_nav_bar.dart';
 
 class Page1 extends StatefulWidget {
   @override
@@ -147,6 +148,22 @@ class _Page1State extends State<Page1> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: 0, // Adjust current index as per the page
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              Navigator.pushNamed(context, '/');
+              break;
+            case 1:
+              Navigator.pushNamed(context, '/save_task_name');
+              break;
+            case 2:
+              Navigator.pushNamed(context, '/profiles');
+              break;
+          }
+        },
       ),
     );
   }
