@@ -10,12 +10,14 @@ class SaveFamilyName extends StatefulWidget {
 
 class _SaveFamilyNameState extends State<SaveFamilyName> {
   final TextEditingController _PersonNameController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final taskRepository = Provider.of<TaskRepository>(context);
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: false,
       ),
@@ -25,7 +27,7 @@ class _SaveFamilyNameState extends State<SaveFamilyName> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Family',
+                'Your',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               Text(
@@ -49,17 +51,22 @@ class _SaveFamilyNameState extends State<SaveFamilyName> {
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () async {
-                  if (_PersonNameController.text.isNotEmpty) {
+                  if (_PersonNameController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please enter a member name')),
+                    );
+                  } else {
                     await taskRepository.addnewPerson(_PersonNameController.text);
                     _PersonNameController.clear();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('member added successfully')),
+                      SnackBar(content: Text('Member added successfully')),
                     );
-                    (context as Element).reassemble();
+                    setState(() {}); // Rebuild widget to show new member
                   }
                 },
                 child: Text('Add member'),
               ),
+
               SizedBox(height: 20),
               FutureBuilder<List<String>>(
                 future: taskRepository.FindAllPerson(),

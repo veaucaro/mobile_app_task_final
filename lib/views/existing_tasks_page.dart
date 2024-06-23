@@ -24,13 +24,12 @@ class _SaveNameState extends State<SaveName> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               Text(
-                'Tasks',
+                'Your',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               Text(
-                ' Names',
+                ' Tasks',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -50,7 +49,11 @@ class _SaveNameState extends State<SaveName> {
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () async {
-                  if (_taskNameController.text.isNotEmpty) {
+                  if (_taskNameController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please enter a task name')),
+                    );
+                  } else {
                     await taskRepository.addnewTask(_taskNameController.text);
                     _taskNameController.clear();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -84,12 +87,10 @@ class _SaveNameState extends State<SaveName> {
                               trailing: IconButton(
                                 icon: Icon(Icons.delete),
                                 onPressed: () async {
-                                  // 删除任务
                                   await taskRepository.deleteTask(taskName);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text('Task deleted successfully')),
                                   );
-                                  // Refresh the state to show the updated task list
                                   setState(() {});
                                 },
                               ),

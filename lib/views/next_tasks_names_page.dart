@@ -1,7 +1,5 @@
-// page 2 - Find next tasks - names
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../providers/task_provider.dart';
 import '../repositories/task_repository.dart';
 
@@ -39,12 +37,13 @@ class _Page2State extends State<Page2> {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: Icon(Icons.select_all,size: 30,),
+            icon: Icon(Icons.select_all, size: 30),
             onPressed: () {
               if (taskProvider.selectedPerson.length == _persons.length) {
                 taskProvider.clearAllPerson();
               } else {
-              taskProvider.selectAllPerson(_persons);}
+                taskProvider.selectAllPerson(_persons);
+              }
             },
           ),
         ],
@@ -53,7 +52,6 @@ class _Page2State extends State<Page2> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 标题行
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -72,7 +70,6 @@ class _Page2State extends State<Page2> {
               ],
             ),
             SizedBox(height: 20),
-            // FutureBuilder 显示家庭成员列表
             FutureBuilder<List<String>>(
               future: _personsFuture,
               builder: (context, snapshot) {
@@ -81,9 +78,24 @@ class _Page2State extends State<Page2> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Text('No family members found.');
+                  return Column(
+                    children: [
+                      Text('No family members found.'),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/profiles');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.deepPurple,
+                        ),
+                        child: Text('Add Member'),
+                      ),
+                    ],
+                  );
                 } else {
-                  _persons = snapshot.data!; // 更新家庭成员列表数据
+                  _persons = snapshot.data!;
                   return Expanded(
                     child: ListView.builder(
                       itemCount: _persons.length,
@@ -102,23 +114,26 @@ class _Page2State extends State<Page2> {
                 }
               },
             ),
-            // 下一步按钮
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (taskProvider.selectedPerson.isEmpty) {
+                    if (_persons.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('No family members found.'),
+                        ),
+                      );
+                    } else if (taskProvider.selectedPerson.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Please select at least one person.'),
                         ),
                       );
-                      return;
-                    }
-                    else{
-                    Navigator.pushNamed(context, '/page3');
+                    } else {
+                      Navigator.pushNamed(context, '/page3');
                     }
                   },
                   style: ElevatedButton.styleFrom(

@@ -1,9 +1,7 @@
-// page 1 - Find next tasks - tasks
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/task_provider.dart';
-import '../repositories/task_repository.dart'; // 假设你有一个 TaskProvider 来管理任务数据
+import '../repositories/task_repository.dart';
 
 class Page1 extends StatefulWidget {
   @override
@@ -41,11 +39,10 @@ class _Page1State extends State<Page1> {
           IconButton(
             icon: Icon(Icons.select_all, size: 30),
             onPressed: () {
-              // 实现全选逻辑
               if (taskProvider.selectedTasks.length == _tasks.length) {
-                taskProvider.clearAllTasks(); // 取消全选
+                taskProvider.clearAllTasks();
               } else {
-                taskProvider.selectAllTasks(_tasks); // 全选
+                taskProvider.selectAllTasks(_tasks);
               }
             },
           ),
@@ -55,7 +52,6 @@ class _Page1State extends State<Page1> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 标题行
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -74,7 +70,6 @@ class _Page1State extends State<Page1> {
               ],
             ),
             SizedBox(height: 20),
-            // FutureBuilder 显示任务列表
             FutureBuilder<List<String>>(
               future: _tasksFuture,
               builder: (context, snapshot) {
@@ -82,10 +77,25 @@ class _Page1State extends State<Page1> {
                   return CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Text('No tasks found.');
+                } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                  return Column(
+                    children: [
+                      Text('No tasks found.'),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/save_task_name');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.deepPurple,
+                        ),
+                        child: Text('Add Task'),
+                      ),
+                    ],
+                  );
                 } else {
-                  _tasks = snapshot.data!; // 更新任务列表数据
+                  _tasks = snapshot.data!;
                   return Expanded(
                     child: ListView.separated(
                       itemCount: _tasks.length,
@@ -105,23 +115,25 @@ class _Page1State extends State<Page1> {
                 }
               },
             ),
-            // 下一步按钮
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    // if didn't select any task, show a snackbar
-                    if (taskProvider.selectedTasks.isEmpty) {
+                    if (_tasks.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('No tasks found.'),
+                        ),
+                      );
+                    } else if (taskProvider.selectedTasks.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Please select at least one task.'),
                         ),
                       );
-                      return;
-                    }
-                    else{
+                    } else {
                       Navigator.pushNamed(context, '/page2');
                     }
                   },
