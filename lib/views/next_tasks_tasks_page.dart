@@ -10,40 +10,41 @@ class Page1 extends StatefulWidget {
 }
 
 class _Page1State extends State<Page1> {
-  late Future<List<String>> _tasksFuture;
-  List<String> _tasks = [];
+  late Future<List<String>> _tasksFuture; // Future for fetching tasks
+  List<String> _tasks = []; // List to store fetched tasks
 
   @override
   void initState() {
     super.initState();
-    _tasksFuture = _fetchTasks();
+    _tasksFuture = _fetchTasks(); // Initialize _tasksFuture in initState
   }
 
+  // Method to fetch tasks from the repository
   Future<List<String>> _fetchTasks() async {
     try {
       final tasks = await Provider.of<TaskRepository>(context, listen: false).FindAllTask();
-      return tasks;
+      return tasks; // Return the fetched tasks
     } catch (e) {
-      print('Error loading tasks: $e');
-      return [];
+      print('Error loading tasks: $e'); // Handle error if fetching tasks fails
+      return []; // Return an empty list in case of error
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context);
+    final taskProvider = Provider.of<TaskProvider>(context); // Access TaskProvider
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false, // Disable back button on app bar
         actions: [
           IconButton(
             icon: Icon(Icons.select_all, size: 30),
             onPressed: () {
               if (taskProvider.selectedTasks.length == _tasks.length) {
-                taskProvider.clearAllTasks();
+                taskProvider.clearAllTasks(); // Clear all selected tasks if all are selected
               } else {
-                taskProvider.selectAllTasks(_tasks);
+                taskProvider.selectAllTasks(_tasks); // Select all tasks
               }
             },
           ),
@@ -75,17 +76,17 @@ class _Page1State extends State<Page1> {
               future: _tasksFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return CircularProgressIndicator(); // Show loading indicator while fetching tasks
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return Text('Error: ${snapshot.error}'); // Display error message if fetching fails
                 } else if (snapshot.data == null || snapshot.data!.isEmpty) {
                   return Column(
                     children: [
-                      Text('No tasks found.'),
+                      Text('No tasks found.'), // Display message if no tasks are found
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/save_task_name');
+                          Navigator.pushNamed(context, '/save_task_name'); // Navigate to add task page
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -96,7 +97,7 @@ class _Page1State extends State<Page1> {
                     ],
                   );
                 } else {
-                  _tasks = snapshot.data!;
+                  _tasks = snapshot.data!; // Assign fetched tasks to _tasks list
                   return Expanded(
                     child: ListView.separated(
                       itemCount: _tasks.length,
@@ -107,7 +108,7 @@ class _Page1State extends State<Page1> {
                           title: Text(task),
                           value: taskProvider.isSelectedT(task),
                           onChanged: (value) {
-                            taskProvider.toggleSelectionT(task);
+                            taskProvider.toggleSelectionT(task); // Toggle task selection
                           },
                         );
                       },
@@ -125,17 +126,17 @@ class _Page1State extends State<Page1> {
                     if (_tasks.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('No tasks found.'),
+                          content: Text('No tasks found.'), // Show snackbar if no tasks are found
                         ),
                       );
                     } else if (taskProvider.selectedTasks.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Please select at least one task.'),
+                          content: Text('Please select at least one task.'), // Show snackbar if no tasks are selected
                         ),
                       );
                     } else {
-                      Navigator.pushNamed(context, '/page2');
+                      Navigator.pushNamed(context, '/page2'); // Navigate to next page
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -150,7 +151,7 @@ class _Page1State extends State<Page1> {
         ),
       ),
       bottomNavigationBar: BottomNavBar(
-        currentIndex: 0, // Adjust current index as per the page
+        currentIndex: 0,
         onTap: (index) {
           switch (index) {
             case 0:

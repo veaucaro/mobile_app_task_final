@@ -1,43 +1,44 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:mobile_app_task_final/models/person.dart';
+import 'package:sqflite/sqflite.dart'; // Import SQFLite library for SQLite operations
+import 'package:path/path.dart'; // Import path library to handle file paths
+import 'package:mobile_app_task_final/models/person.dart'; // Import PersonTask model
 
 class DatabaseService {
-  static final DatabaseService _singleton  = DatabaseService._internal();
-  static Database? _database;
+  static final DatabaseService _singleton = DatabaseService._internal(); // Singleton instance of DatabaseService
+  static Database? _database; // Static database instance
 
   factory DatabaseService() {
-    return _singleton;
+    return _singleton; // Factory constructor to return the singleton instance
   }
 
-  DatabaseService._internal();
+  DatabaseService._internal(); // Private constructor for singleton pattern
 
   Future<Database> get database async {
-    if (_database != null) return _database!;
+    if (_database != null) return _database!; // Return existing database instance if available
 
-    _database = await _initDatabase();
-    return _database!;
+    _database = await _initDatabase(); // Initialize database if not already done
+    return _database!; // Return the initialized database instance
   }
 
   Future<Database> _initDatabase() async {
     try {
-      String path = join(await getDatabasesPath(), 'Task_Database.db');
+      String path = join(await getDatabasesPath(), 'Task_Database.db'); // Define the database path
       print('Initializing database...');
       Database database = await openDatabase(
         path,
         version: 1,
         onCreate: _onCreate,
-      );
+      ); // Open or create the database at the specified path with version 1
       print('Database initialized successfully');
-      return database;
+      return database; // Return the initialized database instance
     } catch (e) {
-      print('Error initializing database: $e');
-      rethrow;
+      print('Error initializing database: $e'); // Print error if database initialization fails
+      rethrow; // Rethrow the error to handle it elsewhere if needed
     }
   }
 
   Future _onCreate(Database db, int version) async {
     print('Database tables created...');
+    // Create tables in the database if they do not exist
     await db.execute('''
     CREATE TABLE tasks (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,7 +87,7 @@ class DatabaseService {
     final List<Map<String, dynamic>> maps = await db.query('person_tasks');
 
     return List.generate(maps.length, (i) {
-      return PersonTask.fromMap(maps[i]);
+      return PersonTask.fromMap(maps[i]); // Convert database query results to List<PersonTask>
     });
   }
 
@@ -95,7 +96,7 @@ class DatabaseService {
     final List<Map<String, dynamic>> maps = await db.query('tasks');
 
     return List.generate(maps.length, (i) {
-      return maps[i]['taskName'] as String;
+      return maps[i]['taskName'] as String; // Extract task names from database query results
     });
   }
 
@@ -103,8 +104,8 @@ class DatabaseService {
     final db = await database;
     await db.insert(
       'tasks',
-      {'taskName': taskName},
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      {'taskName': taskName}, // Insert task name into 'tasks' table
+      conflictAlgorithm: ConflictAlgorithm.replace, // Handle conflicts by replacing existing data
     );
   }
 
@@ -112,8 +113,8 @@ class DatabaseService {
     final db = await database;
     await db.insert(
       'persons',
-      {'memberName': personName},
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      {'memberName': personName}, // Insert person name into 'persons' table
+      conflictAlgorithm: ConflictAlgorithm.replace, // Handle conflicts by replacing existing data
     );
   }
 
@@ -122,7 +123,7 @@ class DatabaseService {
     final List<Map<String, dynamic>> maps = await db.query('persons');
 
     return List.generate(maps.length, (i) {
-      return maps[i]['memberName'] as String;
+      return maps[i]['memberName'] as String; // Extract person names from database query results
     });
   }
 
@@ -131,7 +132,7 @@ class DatabaseService {
     await db.delete(
       'tasks',
       where: 'taskName = ?',
-      whereArgs: [name],
+      whereArgs: [name], // Delete task from 'tasks' table based on task name
     );
   }
 
@@ -140,7 +141,7 @@ class DatabaseService {
     await db.delete(
       'persons',
       where: 'memberName = ?',
-      whereArgs: [name],
+      whereArgs: [name], // Delete person from 'persons' table based on person name
     );
   }
 }

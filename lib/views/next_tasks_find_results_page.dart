@@ -10,22 +10,22 @@ class Page3 extends StatefulWidget {
 }
 
 class _Page3State extends State<Page3> {
-  late List<bool> _cardFlipped;
-  late List<String> _assignedPersons;
+  late List<bool> _cardFlipped; // List to track flipped card state
+  late List<String> _assignedPersons; // List to store assigned persons to tasks
 
   @override
   void initState() {
     super.initState();
-    _cardFlipped = [];
-    _assignedPersons = [];
+    _cardFlipped = []; // Initialize _cardFlipped list
+    _assignedPersons = []; // Initialize _assignedPersons list
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final taskProvider = Provider.of<TaskProvider>(context);
-    _cardFlipped = List<bool>.filled(taskProvider.selectedTasks.length, false);
-    _assignedPersons = _assignPersonsToTasks(taskProvider.selectedTasks, taskProvider.selectedPerson);
+    _cardFlipped = List<bool>.filled(taskProvider.selectedTasks.length, false); // Initialize _cardFlipped with false values
+    _assignedPersons = _assignPersonsToTasks(taskProvider.selectedTasks, taskProvider.selectedPerson); // Assign persons to tasks
   }
 
   // Function to assign persons to tasks ensuring no duplicates
@@ -36,10 +36,10 @@ class _Page3State extends State<Page3> {
 
     List<String> assignedPersons = [];
     final shuffledPersons = [...persons];
-    shuffledPersons.shuffle();
+    shuffledPersons.shuffle(); // Shuffle persons list
 
     for (int i = 0; i < tasks.length; i++) {
-      assignedPersons.add(shuffledPersons[i % shuffledPersons.length]);
+      assignedPersons.add(shuffledPersons[i % shuffledPersons.length]); // Assign persons cyclically to tasks
     }
 
     _assignedPersons = assignedPersons; // Store assignments in _assignedPersons
@@ -51,20 +51,28 @@ class _Page3State extends State<Page3> {
     final taskProvider = Provider.of<TaskProvider>(context);
 
     if (_assignedPersons.isEmpty) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator()); // Show loading indicator if assigned persons list is empty
     }
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false, // Disable back button on app bar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Text(
-              'Task Distribution',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Task',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'Distribution',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.indigo,
+              ),
             ),
             SizedBox(height: 20),
             Expanded(
@@ -83,14 +91,14 @@ class _Page3State extends State<Page3> {
                     onTap: () {
                       setState(() {
                         if (!_cardFlipped[index]) {
-                          _cardFlipped[index] = true;
+                          _cardFlipped[index] = true; // Flip card if it's not flipped
                         }
                       });
                     },
                     child: AnimatedSwitcher(
                       duration: Duration(milliseconds: 300),
                       transitionBuilder: (Widget child, Animation<double> animation) {
-                        final rotate = Tween(begin: pi, end: 0.0).animate(animation);
+                        final rotate = Tween(begin: pi, end: 0.0).animate(animation); // Animation for card flipping
                         return AnimatedBuilder(
                           animation: rotate,
                           child: child,
@@ -156,15 +164,17 @@ class _Page3State extends State<Page3> {
                 ElevatedButton.icon(
                   onPressed: () {
                     setState(() {
-                      _assignedPersons = _assignPersonsToTasks(taskProvider.selectedTasks, taskProvider.selectedPerson);
-                      _cardFlipped = List<bool>.filled(taskProvider.selectedTasks.length, false);
+                      _assignedPersons = _assignPersonsToTasks(taskProvider.selectedTasks, taskProvider.selectedPerson); // Refresh assignments
+                      _cardFlipped = List<bool>.filled(taskProvider.selectedTasks.length, false); // Reset flipped cards
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.black, shape: CircleBorder(), // 设置按钮形状为圆形
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black,
+                    shape: CircleBorder(), // Set button shape to circle
                     padding: EdgeInsets.all(10),
                   ),
-                  icon: Icon(Icons.refresh,size: 24,),
+                  icon: Icon(Icons.refresh, size: 24),
                   label: Text(''),
                 ),
                 ElevatedButton(
@@ -173,13 +183,14 @@ class _Page3State extends State<Page3> {
                       if (_cardFlipped[i]) {
                         final task = taskProvider.selectedTasks[i];
                         final person = _assignedPersons[i];
-                        taskProvider.updateTaskPersonMappingInDatabase(task, person);
+                        taskProvider.updateTaskPersonMappingInDatabase(task, person); // Update task-person mapping in database
                       }
                     }
-                    Navigator.pushNamed(context, '/accomplished_tasks');
+                    Navigator.pushNamed(context, '/accomplished_tasks'); // Navigate to accomplished tasks page
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black,
                   ),
                   child: Text('Check accomplished tasks ->'),
                 ),
