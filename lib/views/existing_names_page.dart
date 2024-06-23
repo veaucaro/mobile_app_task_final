@@ -17,7 +17,6 @@ class _SaveFamilyNameState extends State<SaveFamilyName> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Family name'),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -25,6 +24,18 @@ class _SaveFamilyNameState extends State<SaveFamilyName> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                'Family',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                ' Names',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.indigo,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(

@@ -17,7 +17,6 @@ class _SaveNameState extends State<SaveName> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tasks name'),
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
@@ -25,6 +24,19 @@ class _SaveNameState extends State<SaveName> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
+              Text(
+                'Tasks',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                ' Names',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.indigo,
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(

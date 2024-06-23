@@ -15,11 +15,11 @@ class AccomplishedTasksPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Accomplished Tasks'),
               automaticallyImplyLeading: false,
             ),
             body: Center(
               child: CircularProgressIndicator(),
+
             ),
             bottomNavigationBar: BottomNavBar(
               currentIndex: 1,
@@ -41,7 +41,6 @@ class AccomplishedTasksPage extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Accomplished Tasks'),
               automaticallyImplyLeading: false,
             ),
             body: Center(
@@ -67,7 +66,6 @@ class AccomplishedTasksPage extends StatelessWidget {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Accomplished Tasks'),
               automaticallyImplyLeading: false,
             ),
             body: Center(
@@ -103,41 +101,66 @@ class AccomplishedTasksPage extends StatelessWidget {
 
           return Scaffold(
             appBar: AppBar(
-              title: Text('Accomplished Tasks'),
               automaticallyImplyLeading: false,
             ),
-            body: ListView.builder(
-              itemCount: groupedTasks.length,
-              itemBuilder: (context, index) {
-                final personName = groupedTasks.keys.elementAt(index);
-                final personTasks = groupedTasks[personName]!;
-
-                return Card(
-                  margin: EdgeInsets.all(10),
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          personName,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        ...personTasks.map((task) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(
-                            '${task.taskTitle} = ${task.count} times',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        )),
-                      ],
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Accomplished',
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 16.0),
+                  child: Text(
+                    'Tasks',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.indigo,
                     ),
                   ),
-                );
-              },
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: groupedTasks.length,
+                    itemBuilder: (context, index) {
+                      final personName = groupedTasks.keys.elementAt(index);
+                      final personTasks = groupedTasks[personName]!;
+
+                      return Card(
+                        margin: EdgeInsets.all(10),
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                personName,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              ...personTasks.map((task) => Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Text(
+                                  '${task.taskTitle} = ${task.count} times',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              )),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
             bottomNavigationBar: BottomNavBar(
               currentIndex: 1,
