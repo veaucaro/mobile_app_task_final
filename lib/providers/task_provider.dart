@@ -45,6 +45,13 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateNumberTaskPersonMappingInDatabase(String taskName, String personName, int newCount) async {
+    PersonTask updatedTask = PersonTask(personName: personName, taskTitle: taskName, count: newCount);
+    await _databaseService.insertOrUpdatePersonTask(updatedTask);
+    fetchTasks();     // Refresh list after update
+  }
+
+
   Future<void> updateTaskPersonMappingInDatabase(String taskName, String personName) async {
     bool found = false;
     PersonTask? personTask;

@@ -70,10 +70,11 @@ class DatabaseService {
     if (existing.isNotEmpty) {
       // If a row already exists, update the count
       await db.rawUpdate(
-          'UPDATE person_tasks SET count = count + 1 WHERE personName = ? AND taskTitle = ?',
-          [personTask.personName, personTask.taskTitle]);
+        'UPDATE person_tasks SET count = ? WHERE personName = ? AND taskTitle = ?',
+        [personTask.count, personTask.personName, personTask.taskTitle],
+      );
     } else {
-      // If not, insert row
+      // Otherwise, insert a new row
       await db.insert('person_tasks', personTask.toMap());
     }
 
