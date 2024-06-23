@@ -1,7 +1,6 @@
-// providers/task_provider.dart
 import 'package:flutter/material.dart';
 import 'package:mobile_app_task_final/services/task_service.dart';
-import 'package:mobile_app_task_final/services/database_service.dart'; // Ajouté
+import 'package:mobile_app_task_final/services/database_service.dart';
 import 'package:mobile_app_task_final/models/person.dart';
 
 class TaskProvider with ChangeNotifier {
@@ -17,12 +16,6 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> update(PersonTask personTask) async {
-    await service.update(personTask);
-    fetchTasks();
-  }
-
-  // Ajouté
   DatabaseService _databaseService = DatabaseService();
 
   Future<List<PersonTask>> getPersonTasks() async {
@@ -52,24 +45,34 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateTaskPersonMappingInDatabase(String taskName, String personName) async {
-    // Find the personTask object, if it exists, increment the count by 1, if it does not exist, create a new object
-    PersonTask? personTask = _tasks.firstWhere(
-          (element) => element.taskTitle == taskName && element.personName == personName,
-      orElse: () => PersonTask(personName: personName, taskTitle: taskName, count: 0),
-    );
+  Future<void> updateTaskPersonMappingInDatabase(String taskName, String personName) async {
+    bool found = false;
+    PersonTask? personTask;
 
-    if (personTask.personName == null) {
-      await service.update(personTask);
-    } else {
-      personTask.count += 1;
-      await service.update(personTask);
+    // Search for a PersonTask corresponding to taskName and personName
+    for (var task in _tasks) {
+      if (task.taskTitle == taskName && task.personName == personName) {
+        personTask = task;
+        found = true;
+        break;
+      }
     }
 
-    // Update the database as well
-    await _databaseService.insertPersonTask(personTask);
+    if (!found) {
+      // If no PersonTask was found, create a new
+      personTask = PersonTask(personName: personName, taskTitle: taskName, count: 1);
+    } else {
+      // If a PersonTask was found, increment its number
+      personTask!.count++;
+    }
+
+    // Insert or update the PersonTask in the database
+    await _databaseService.insertOrUpdatePersonTask(personTask);
+
+    // Refresh Assignment List
     fetchTasks();
   }
+
 
   void toggleSelectionP(String personName) {
     if (_selectedPerson.contains(personName)) {

@@ -1,4 +1,3 @@
-// services/database_service.dart
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:mobile_app_task_final/models/person.dart';
@@ -63,14 +62,22 @@ class DatabaseService {
     ''');
   }
 
-  Future<void> insertPersonTask(PersonTask personTask) async {
+  Future<void> insertOrUpdatePersonTask(PersonTask personTask) async {
     final db = await database;
-    await db.insert(
-      'person_tasks',
-      personTask.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    print('PersonTask inserted successfully: $personTask');
+    final List<Map<String, dynamic>> existing = await db.query('person_tasks',
+        where: 'personName = ? AND taskTitle = ?', whereArgs: [personTask.personName, personTask.taskTitle]);
+
+    if (existing.isNotEmpty) {
+      // If a row already exists, update the count
+      await db.rawUpdate(
+          'UPDATE person_tasks SET count = count + 1 WHERE personName = ? AND taskTitle = ?',
+          [personTask.personName, personTask.taskTitle]);
+    } else {
+      // If not, insert row
+      await db.insert('person_tasks', personTask.toMap());
+    }
+
+    print('PersonTask inserted or updated successfully: $personTask');
   }
 
   Future<List<PersonTask>> personTasks() async {
@@ -135,6 +142,4 @@ class DatabaseService {
       whereArgs: [name],
     );
   }
-
-
 }

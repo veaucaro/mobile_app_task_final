@@ -19,7 +19,7 @@ class TaskRepository {
   }
 
   Future<void> update(PersonTask personTask) async {
-    await _databaseService.insertPersonTask(personTask);
+    await _databaseService.insertOrUpdatePersonTask(personTask);
   }
 
   Future<void> addnewTask(String taskName) async {

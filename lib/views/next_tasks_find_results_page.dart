@@ -1,5 +1,3 @@
-// page 3 - check results
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
@@ -17,21 +15,33 @@ class _Page3State extends State<Page3> {
   @override
   void initState() {
     super.initState();
-    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    _cardFlipped = [];
+    _assignedPersons = [];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final taskProvider = Provider.of<TaskProvider>(context);
     _cardFlipped = List<bool>.filled(taskProvider.selectedTasks.length, false);
     _assignedPersons = _assignPersonsToTasks(taskProvider.selectedTasks, taskProvider.selectedPerson);
   }
 
   // Function to assign persons to tasks ensuring no duplicates
   List<String> _assignPersonsToTasks(List<String> tasks, List<String> persons) {
-    List<String> assignedPersons = [];
-    final shuffledPersons = [...persons]; // Create a shuffled copy of persons list
-    shuffledPersons.shuffle(); // Shuffle the persons list
-
-    for (int i = 0; i < tasks.length; i++) {
-      assignedPersons.add(shuffledPersons[i % shuffledPersons.length]); // Assign persons in a round-robin manner
+    if (_assignedPersons.isNotEmpty) {
+      return _assignedPersons; // Return existing assignments if already populated
     }
 
+    List<String> assignedPersons = [];
+    final shuffledPersons = [...persons];
+    shuffledPersons.shuffle();
+
+    for (int i = 0; i < tasks.length; i++) {
+      assignedPersons.add(shuffledPersons[i % shuffledPersons.length]);
+    }
+
+    _assignedPersons = assignedPersons; // Store assignments in _assignedPersons
     return assignedPersons;
   }
 
@@ -89,7 +99,7 @@ class _Page3State extends State<Page3> {
                             return Transform(
                               transform: Matrix4.rotationY(angle),
                               alignment: Alignment.center,
-                              child: isFront ? child : Transform(
+                              child: isFront ? child! : Transform(
                                 transform: Matrix4.rotationY(pi),
                                 alignment: Alignment.center,
                                 child: child,
