@@ -24,6 +24,14 @@ class AccomplishedTasksPage extends StatelessWidget {
 
           return Scaffold(
             appBar: AppBar(
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/settings');
+                  },
+                )
+              ],
               automaticallyImplyLeading: false, // Disable the back button on the app bar
             ),
             body: buildTasksList(groupedTasks), // Show the list of grouped tasks

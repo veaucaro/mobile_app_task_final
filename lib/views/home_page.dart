@@ -24,6 +24,18 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: Color(0xFF7D50FF), // Background color of the scaffold
+      appBar: AppBar(
+        backgroundColor: Color(0xFF7D50FF),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
+          )
+        ],
+        automaticallyImplyLeading: false, // Disable the back button on the app bar
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

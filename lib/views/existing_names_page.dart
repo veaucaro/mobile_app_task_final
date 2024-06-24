@@ -19,6 +19,14 @@ class _SaveFamilyNameState extends State<SaveFamilyName> {
     return Scaffold(
       key: _scaffoldKey, // Assign the scaffold key to Scaffold
       appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
+          )
+        ],
         automaticallyImplyLeading: false, // Disable the back button on the app bar
       ),
       body: SingleChildScrollView(

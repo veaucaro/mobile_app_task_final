@@ -56,6 +56,14 @@ class _Page3State extends State<Page3> {
 
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            },
+          )
+        ],
         automaticallyImplyLeading: false, // Disable back button on app bar
       ),
       body: Padding(
