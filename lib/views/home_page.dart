@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('lib/assets/icon1.png', height: 200), // Display an image from assets
+            Image.asset('assets/icon1.png', height: 200), // Display an image from assets
             SizedBox(height: 20),
             Text('Welcome', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)), // Welcome text
             Text('Family', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)), // Family text
