@@ -21,3 +21,6 @@ This application is designed to manage tasks assigned to different persons, allo
 
 ## Original figma design
 https://www.figma.com/design/r770Fdt18gWE8v2uzxvffE/Choose-task?node-id=2-14&t=cy5JdnpCFxxglotp-0
+
+## background music source
+https://stocktune.com/
