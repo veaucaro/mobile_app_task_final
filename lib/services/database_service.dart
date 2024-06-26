@@ -144,4 +144,13 @@ class DatabaseService {
       whereArgs: [name], // Delete person from 'persons' table based on person name
     );
   }
+
+  Future<void> deletePersonTask(String taskTitle, String personName) async {
+    final db = await database;
+    await db.delete(
+      'person_tasks',
+      where: 'taskTitle = ? AND personName = ?',
+      whereArgs: [taskTitle, personName],
+    );
+  }
 }

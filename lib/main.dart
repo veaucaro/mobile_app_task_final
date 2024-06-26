@@ -24,7 +24,6 @@ void main() async {
 
   // Initialize AudioPlayer
   AudioPlayer audioPlayer = AudioPlayer();
-  // 初始化放background1.mp3
   try {
     await audioPlayer.play(AssetSource('audio/background1.mp3'), volume: 0.5);
     audioPlayer.setReleaseMode(ReleaseMode.loop);

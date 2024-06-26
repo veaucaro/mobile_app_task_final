@@ -16,18 +16,16 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _isMusicOn = true; // 音樂開關的狀態，預設為開啟
-  int _currentBackgroundIndex = 0; // 当前背景音乐索引
+  bool _isMusicOn = true;
+  int _currentBackgroundIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    // 根据 widget.audioPlayer 的状态来初始化 _isMusicOn
     _isMusicOn = widget.audioPlayer.state == PlayerState.playing;
   }
 
   Future<void> _saveSettings() async {
-    // 如果音樂是開啟的，則繼續播放音樂；否則暫停音樂
     if (_isMusicOn) {
       await widget.audioPlayer.resume();
     } else {
@@ -43,9 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
     ];
 
     try {
-      // 停止当前播放的音乐
       await widget.audioPlayer.stop();
-      // 播放新的背景音乐
       await widget.audioPlayer.play(AssetSource(musicList[_currentBackgroundIndex]), volume: 0.5);
 
     } catch (e) {
@@ -99,11 +95,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   value: _isMusicOn,
                   onChanged: (value) {
                     setState(() {
-                      _isMusicOn = value; // 更新音樂開關的狀態
-                      _saveSettings(); // 儲存設定
+                      _isMusicOn = value;
+                      _saveSettings();
                     });
                   },
-                  activeColor: Colors.blue, // 開啟時的顏色
+                  activeColor: Colors.blue,
                 ),
               ],
             ),

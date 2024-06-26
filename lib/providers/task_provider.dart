@@ -126,4 +126,9 @@ class TaskProvider with ChangeNotifier {
     _selectedTasks.clear();
     notifyListeners();
   }
+
+  Future<void> deleteTask(String taskTitle, String personName) async {
+    await _databaseService.deletePersonTask(taskTitle, personName);
+    fetchTasks();
+  }
 }

@@ -246,7 +246,12 @@ class AccomplishedTasksPage extends StatelessWidget {
             TextButton(
               child: Text('Update'), // Update button text
               onPressed: () async {
-                if (newCount != task.count) {
+                if (newCount == 0) {
+                  await Provider.of<TaskProvider>(context, listen: false)
+                      .deleteTask(task.taskTitle, task.personName); // 删除任务
+                  Navigator.of(context).pop(); // Dismiss dialog
+                }
+                else if(newCount != task.count) {
                   task.count = newCount; // Update task count
                   await Provider.of<TaskProvider>(context, listen: false)
                       .updateNumberTaskPersonMappingInDatabase(
