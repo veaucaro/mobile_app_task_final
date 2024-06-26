@@ -190,21 +190,18 @@ class AccomplishedTasksPage extends StatelessWidget {
                       ),
                       ...personTasks.map((task) => Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               '${task.taskTitle} = ${task.count} times', // Display task title and count
                               style: TextStyle(fontSize: 16), // Task text style
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  showEditDialog(context, task); // Show dialog for editing task count
-                                },
-                                child: Text('Edit'), // Button text
-                              ),
+                            ElevatedButton(
+                              onPressed: () {
+                                showEditDialog(context, task); // Show dialog for editing task count
+                              },
+                              child: Text('Edit'), // Button text
                             ),
                           ],
                         ),
