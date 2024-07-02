@@ -1,4 +1,4 @@
-package com.example.mobile_app_task_final
+package io.github.veaucaro.TaskRoller
 
 import io.flutter.embedding.android.FlutterActivity
 
